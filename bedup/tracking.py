@@ -314,7 +314,7 @@ def dedup_tracked(sess, volset, tt):
     Commonality1, Commonality2, Commonality3 = comm_mappings(vol_ids)
 
     try:
-        query = sess.query(Commonality1)
+        query = sess.query(Commonality1).yield_per(50)
         le = query.count()
         if not le:
             return
@@ -357,10 +357,10 @@ def dedup_tracked(sess, volset, tt):
                 rfile = fopenat(inode.vol.fd, path)
                 inode.mini_hash_from_file(rfile)
                 rfile.close()
+            sess.flush()
+        sess.commit()
 
-            sess.commit()
-
-        query = list(sess.query(Commonality2))
+        query = list(sess.query(Commonality2)).yield_per(50)
         le = len(query)
         if not le:
             return
@@ -380,10 +380,10 @@ def dedup_tracked(sess, volset, tt):
                 rfile = fopenat(inode.vol.fd, path)
                 inode.fiemap_hash_from_file(rfile)
                 rfile.close()
+            sess.flush()
+        sess.commit()
 
-            sess.commit()
-
-        query = list(sess.query(Commonality3))
+        query = list(sess.query(Commonality3)).yield_per(50)
         le = len(query)
         if not le:
             return
@@ -521,7 +521,8 @@ def dedup_tracked(sess, volset, tt):
                             evti = DedupEventInode(
                                 event=evt, ino=inode.ino, vol=inode.vol)
                             sess.add(evti)
-                        sess.commit()
+                        sess.flush()
+        sess.commit()
 
         tt.notify(
             'Potential space gain: pass 1 %d, pass 2 %d pass 3 %d' % (
