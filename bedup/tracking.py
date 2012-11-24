@@ -356,6 +356,9 @@ def dedup_tracked(sess, volset, tt):
                     continue
                 rfile = fopenat(inode.vol.fd, path)
                 inode.mini_hash_from_file(rfile)
+                rfile.close()
+
+            sess.commit()
 
         query = list(sess.query(Commonality2))
         le = len(query)
@@ -376,6 +379,9 @@ def dedup_tracked(sess, volset, tt):
                     continue
                 rfile = fopenat(inode.vol.fd, path)
                 inode.fiemap_hash_from_file(rfile)
+                rfile.close()
+
+            sess.commit()
 
         query = list(sess.query(Commonality3))
         le = len(query)
