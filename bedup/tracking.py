@@ -360,7 +360,7 @@ def dedup_tracked(sess, volset, tt):
             sess.flush()
         sess.commit()
 
-        query = list(sess.query(Commonality2)).yield_per(50)
+        query = sess.query(Commonality2).yield_per(50)
         le = len(query)
         if not le:
             return
@@ -383,7 +383,7 @@ def dedup_tracked(sess, volset, tt):
             sess.flush()
         sess.commit()
 
-        query = list(sess.query(Commonality3)).yield_per(50)
+        query = sess.query(Commonality3).yield_per(50)
         le = len(query)
         if not le:
             return
