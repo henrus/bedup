@@ -361,7 +361,7 @@ def dedup_tracked(sess, volset, tt):
         sess.commit()
 
         query = sess.query(Commonality2).yield_per(50)
-        le = len(query)
+        le = query.count()
         if not le:
             return
         tt.format('{elapsed} Extent map {comm2:counter}/{comm2:total}')
@@ -384,7 +384,7 @@ def dedup_tracked(sess, volset, tt):
         sess.commit()
 
         query = sess.query(Commonality3).yield_per(50)
-        le = len(query)
+        le = query.count()
         if not le:
             return
         tt.format(
