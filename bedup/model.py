@@ -142,7 +142,19 @@ class Inode(Base):
         # A very cheap, very partial hash for quick disambiguation
         # Won't help with things like zeroed or sparse files.
         # The mini_hash for those is 0x10000001
-        rfile.seek(int(self.size * .3))
+        
+        if self.size > 1.3*4096:
+            rfile.seek(int(self.size * .3))
+        # bitops to make unsigned, for better readability
+        self.mini_hash = adler32(rfile.read(4096)) & 0xffffffff
+
+    def mini_hash_from_file(self, rfile):
+        # A very cheap, very partial hash for quick disambiguation
+        # Won't help with things like zeroed or sparse files.
+        # The mini_hash for those is 0x10000001
+        
+        #if self.size > 1.3*4096:
+        #    rfile.seek(int(self.size * .3))
         # bitops to make unsigned, for better readability
         self.mini_hash = adler32(rfile.read(4096)) & 0xffffffff
 

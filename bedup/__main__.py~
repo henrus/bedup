@@ -35,7 +35,7 @@ from .model import META
 from .syncfs import syncfs
 from .termupdates import TermTemplate
 from .tracking import (
-    show_vols, get_vol, track_updated_files, dedup_tracked, dedup_tracked2, forget_vol)
+    show_vols, get_vol, track_updated_files, dedup_tracked, forget_vol)
 
 
 APP_NAME = 'bedup'
